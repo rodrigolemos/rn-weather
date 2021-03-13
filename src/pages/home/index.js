@@ -3,12 +3,14 @@ import { SafeAreaView, StyleSheet } from 'react-native';
 
 import Menu from '../../components/menu';
 import Header from '../../components/header';
+import Conditions from '../../components/conditions';
 
 export default function Home() {
   return (
     <SafeAreaView style={styles.container}>
       <Menu />
       <Header />
+      <Conditions />
     </SafeAreaView>
   )
 }
