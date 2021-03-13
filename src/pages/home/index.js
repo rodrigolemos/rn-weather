@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import * as Location from 'expo-location';
 
 import Menu from '../../components/menu';
 import Header from '../../components/header';
@@ -90,6 +91,26 @@ const forecast = [
 ];
 
 export default function Home() {
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    
+    (async () => {
+      const { status } = await Location.requestPermissionsAsync();
+
+      if (status !== 'granted') {
+        setErrorMsg('Permissão negada para acessar localização');
+        setLoading(false);
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+
+    })();
+
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Menu />
