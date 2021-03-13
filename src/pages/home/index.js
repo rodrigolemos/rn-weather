@@ -1,98 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet } from 'react-native';
+import { FlatList, SafeAreaView, StyleSheet, View, Text } from 'react-native';
 import * as Location from 'expo-location';
+import { api, key } from '../../services/api';
+import { condition } from '../../utils/condition'
 
 import Menu from '../../components/menu';
 import Header from '../../components/header';
 import Conditions from '../../components/conditions';
 import Forecast from '../../components/forecast';
 
-const forecast = [
-  {
-    "date": "13/03",
-    "weekday": "Sáb",
-    "max": 30,
-    "min": 17,
-    "description": "Ensolarado",
-    "condition": "clear_day"
-  },
-  {
-    "date": "14/03",
-    "weekday": "Dom",
-    "max": 30,
-    "min": 18,
-    "description": "Ensolarado",
-    "condition": "clear_day"
-  },
-  {
-    "date": "15/03",
-    "weekday": "Seg",
-    "max": 29,
-    "min": 18,
-    "description": "Tempestades",
-    "condition": "storm"
-  },
-  {
-    "date": "16/03",
-    "weekday": "Ter",
-    "max": 30,
-    "min": 18,
-    "description": "Parcialmente nublado",
-    "condition": "cloudly_day"
-  },
-  {
-    "date": "17/03",
-    "weekday": "Qua",
-    "max": 30,
-    "min": 19,
-    "description": "Tempestades isoladas",
-    "condition": "storm"
-  },
-  {
-    "date": "18/03",
-    "weekday": "Qui",
-    "max": 30,
-    "min": 18,
-    "description": "Tempestades",
-    "condition": "storm"
-  },
-  {
-    "date": "19/03",
-    "weekday": "Sex",
-    "max": 29,
-    "min": 20,
-    "description": "Tempestades",
-    "condition": "storm"
-  },
-  {
-    "date": "20/03",
-    "weekday": "Sáb",
-    "max": 30,
-    "min": 20,
-    "description": "Tempestades isoladas",
-    "condition": "storm"
-  },
-  {
-    "date": "21/03",
-    "weekday": "Dom",
-    "max": 30,
-    "min": 21,
-    "description": "Parcialmente nublado",
-    "condition": "cloudly_day"
-  },
-  {
-    "date": "22/03",
-    "weekday": "Seg",
-    "max": 30,
-    "min": 21,
-    "description": "Tempo nublado",
-    "condition": "cloud"
-  }
-];
-
 export default function Home() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [weather, setWeather] = useState([]);
+  const [icon, setIcon] = useState({ name: 'cloud', color: '#fff' });
+  const [background, setBackground] = useState(['#1ed6ff', '#97c1ff']);
 
   useEffect(() => {
     
@@ -107,20 +29,49 @@ export default function Home() {
 
       const location = await Location.getCurrentPositionAsync({});
 
+      const response = await api.get(
+        `/weather?key=${key}&lat=${location.coords.latitude}&lon=${location.coords.longitude}`
+      );
+
+      setWeather(response.data);
+
+      if (response.data.results.currently === 'noite') {
+        setBackground(['#0c3741', '#0f2f61']);
+      }
+
+      setIcon(
+        condition(response.data.results.condition_slug)
+      );
+
+      setLoading(false);
     })();
 
   }, []);
 
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <Text>Carregando...</Text>
+      </View>
+    )
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Menu />
-      <Header />
-      <Conditions />
+      <Header
+        background={background}
+        weather={weather}
+        icon={icon}
+      />
+      <Conditions
+        weather={weather}
+      />
       <FlatList
         horizontal={true}
         contentContainerStyle={{ paddingBottom: '5%' }}
         style={styles.list}
-        data={forecast}
+        data={weather.results.forecast}
         keyExtractor={item => item.date}
         renderItem={({ item }) => <Forecast data={item} />}
       />
