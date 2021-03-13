@@ -74,6 +74,7 @@ export default function Home() {
         data={weather.results.forecast}
         keyExtractor={item => item.date}
         renderItem={({ item }) => <Forecast data={item} />}
+        showsHorizontalScrollIndicator={false}
       />
     </SafeAreaView>
   )
