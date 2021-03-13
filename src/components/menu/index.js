@@ -12,7 +12,7 @@ export default function Menu() {
       onPress={() => navigation.openDrawer()}>
       <Feather
         name="menu"
-        size={36}
+        size={28}
         color="#373737"
       />
     </TouchableOpacity>
@@ -23,13 +23,13 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     zIndex: 9,
-    width: 70,
-    height: 70,
+    width: 60,
+    height: 60,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    left: 15,
-    top: 30,
+    left: 25,
+    top: 25,
     borderTopRightRadius: 25,
     borderBottomRightRadius: 25,
     borderBottomLeftRadius: 25
