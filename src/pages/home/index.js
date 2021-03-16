@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { Text } from 'react-native';
 import * as Location from 'expo-location';
 import { api, key } from '../../services/api';
 import { condition } from '../../utils/condition'
@@ -8,6 +8,8 @@ import Menu from '../../components/menu';
 import Header from '../../components/header';
 import Conditions from '../../components/conditions';
 import Forecast from '../../components/forecast';
+
+import { Container, List } from './styles';
 
 export default function Home() {
   const [errorMsg, setErrorMsg] = useState(null);
@@ -50,14 +52,14 @@ export default function Home() {
 
   if (loading) {
     return (
-      <View style={styles.container}>
+      <Container>
         <Text>Carregando...</Text>
-      </View>
+      </Container>
     )
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <Container>
       <Menu />
       <Header
         background={background}
@@ -67,28 +69,14 @@ export default function Home() {
       <Conditions
         weather={weather}
       />
-      <FlatList
+      <List
         horizontal={true}
         contentContainerStyle={{ paddingBottom: '5%' }}
-        style={styles.list}
         data={weather.results.forecast}
         keyExtractor={item => item.date}
         renderItem={({ item }) => <Forecast data={item} />}
         showsHorizontalScrollIndicator={false}
       />
-    </SafeAreaView>
+    </Container>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#e8f0ff',
-    paddingTop: '5%'
-  },
-  list: {
-    marginTop: 10
-  }
-})
