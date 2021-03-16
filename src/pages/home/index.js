@@ -60,23 +60,29 @@ export default function Home() {
 
   return (
     <Container>
-      <Menu />
-      <Header
-        background={background}
-        weather={weather}
-        icon={icon}
-      />
-      <Conditions
-        weather={weather}
-      />
-      <List
-        horizontal={true}
-        contentContainerStyle={{ paddingBottom: '5%' }}
-        data={weather.results.forecast}
-        keyExtractor={item => item.date}
-        renderItem={({ item }) => <Forecast data={item} />}
-        showsHorizontalScrollIndicator={false}
-      />
+      {errorMsg ? (
+        <Text>{errorMsg}</Text>
+      ) : (
+        <>
+          <Menu />
+          <Header
+            background={background}
+            weather={weather}
+            icon={icon}
+          />
+          <Conditions
+            weather={weather}
+          />
+          <List
+            horizontal={true}
+            contentContainerStyle={{ paddingBottom: '5%' }}
+            data={weather.results.forecast}
+            keyExtractor={item => item.date}
+            renderItem={({ item }) => <Forecast data={item} />}
+            showsHorizontalScrollIndicator={false}
+          />
+        </>
+      )}
     </Container>
   )
 }
