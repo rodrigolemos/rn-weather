@@ -10,6 +10,9 @@ RN Weather é um aplicativo mobile para Android e ios construído com [React Nat
 - [Styled Components](https://styled-components.com/) – Uma biblioteca popular para uso de CSS-in-JS;
 - [Expo](https://expo.io/) - Framework para React Native.
 
+## Recursos adicionais
+- [API HG Brasil](https://hgbrasil.com/)
+
 ## Autor
 
 Rodrigo Lemos
